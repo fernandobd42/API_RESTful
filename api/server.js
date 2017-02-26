@@ -92,8 +92,23 @@ app.put('/api/:id', function(req, res){
                         res.json(result);
                     }
                     mongoclient.close();
+            });
+        });
+    });
+});
+
+// DELETE by ID (remove)
+app.delete('/api/:id', function(req, res){
+    db.open( function(err, mongoclient){
+        mongoclient.collection('postagens', function(err, collection){
+            collection.remove({ _id: objectId(req.params.id)}, function(err, result){
+                if(err){
+                    res.json(err);
+                } else {
+                    res.json(result);
                 }
-            );
+                mongoclient.close();
+            });
         });
     });
 });
