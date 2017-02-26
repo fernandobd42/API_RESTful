@@ -35,9 +35,9 @@ app.post('/api', function(req, res){
         mongoclient.collection('postagens', function(err, collection){
             collection.insert(dados, function(err, records){
                 if(err){
-                    res.json(err);
+                    res.status(400).json(err);
                 } else {
-                    res.json(records);
+                    res.status(200).json(records);
                 }
                 mongoclient.close();
             });
@@ -51,9 +51,9 @@ app.get('/api', function(req, res){
         mongoclient.collection('postagens', function(err, collection){
             collection.find().toArray(function(err, result){
                 if(err){
-                    res.json(err);
+                    res.status(404).json(err);
                 } else {
-                    res.json(result);
+                    res.status(200).json(result);
                 }
                 mongoclient.close();
             });
@@ -67,9 +67,9 @@ app.get('/api/:id', function(req, res){
         mongoclient.collection('postagens', function(err, collection){
             collection.find(objectId(req.params.id)).toArray(function(err, result){
                 if(err){
-                    res.json(err);
+                    res.status(404).json(err);
                 } else {
-                    res.json(result);
+                    res.status(200).json(result);
                 }
                 mongoclient.close();
             });
@@ -87,9 +87,9 @@ app.put('/api/:id', function(req, res){
                 {},
                 function(err, result){
                     if(err){
-                        res.json(err);
+                        res.status(404).json(err);
                     } else {
-                        res.json(result);
+                        res.status(200).json(result);
                     }
                     mongoclient.close();
             });
@@ -103,9 +103,9 @@ app.delete('/api/:id', function(req, res){
         mongoclient.collection('postagens', function(err, collection){
             collection.remove({ _id: objectId(req.params.id)}, function(err, result){
                 if(err){
-                    res.json(err);
+                    res.status(404).json(err);
                 } else {
-                    res.json(result);
+                    res.status(200).json(result);
                 }
                 mongoclient.close();
             });
