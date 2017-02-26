@@ -40,8 +40,21 @@
 										'</div>' +
 									'</div>'
 								);
+								if(data[i].comentarios != undefined){
+									var comentarios = data[i].comentarios;
+
+									for(j = 0; j < comentarios.length; j++){
+										$('#comentarios_'+data[i]._id).append(
+											'<div class="txt_comentario">' +
+												comentarios[j].comentario + ' ' +
+											'</div>'
+										);
+									}
+								}
 							}
-							
+
+
+
 							$('.btn_postagem').click(function(){
 								var id = this.value;
 								var id_input_comentario = 'postagem_'+id;
