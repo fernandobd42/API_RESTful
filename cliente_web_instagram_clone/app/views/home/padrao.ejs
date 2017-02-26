@@ -47,12 +47,28 @@
 										$('#comentarios_'+data[i]._id).append(
 											'<div class="txt_comentario">' +
 												comentarios[j].comentario + ' ' +
+												'<button type="button" value="'+comentarios[j].id_comentario+'" class="btn btn-default btn_remover_postagem">delete</button>' +
 											'</div>'
 										);
 									}
 								}
 							}
 
+							$('.btn_remover_postagem').click(function(){
+							    var id_comentario = this.value;
+
+							    var xhr = new XMLHttpRequest();
+							    xhr.open("DELETE", "http://localhost:8080/api/"+id_comentario);
+							    xhr.setRequestHeader('Content-Type', 'application/json');
+
+							    xhr.onload = function(){
+							        if(xhr.status === 200){
+							            window.location.href = '/home'
+							        }
+							    }
+
+							    xhr.send();
+							});
 
 
 							$('.btn_postagem').click(function(){
