@@ -4,13 +4,13 @@
 		<meta charset="UTF-8">
 
 		<title>Instagram Clone - WEB</title>
-		
+
 		<!-- JQuery -->
 		<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 		<!-- bootstrap - link cdn -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	
+
 		<!-- incluindo css -->
 		<link href="css/style.css" rel="stylesheet">
 
@@ -28,6 +28,32 @@
 					return false;
 				});
 
+				$('#btn-publicar').click(function(){
+					// criar um formData
+					var formData = new FormData();
+
+					var arquivo = document.getElementById('arquivo').files[0];
+					var titulo = document.getElementById('titulo').value;
+
+					formData.append('arquivo', arquivo);
+					formData.append('titulo', titulo);
+
+					// criar um xmlHttpRequest
+					var xhr = new XMLHttpRequest();
+
+					// verificar as mudanças de estado
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState == 4){
+							var resposta = xhr.responseText;
+							document.getElementById('mensagem').innerHTML = resposta
+						}
+					}
+
+					// fazer o envio do nosso request
+					xhr.open("POST", "http://localhost:8080/api")
+					xhr.send(formData);
+				});
+
 			});
 		</script>
 
@@ -40,7 +66,7 @@
 				<div class="col-md-12">
 					<div class="container-fluid">
 						<img alt="Instagram Clone - Versão WEB" src="images/logo2.jpg" class="logo2">
-						<img alt="Incluir" src="images/incluir.jpg" class="pull-right btn-incluir" id="btn_incluir">						
+						<img alt="Incluir" src="images/incluir.jpg" class="pull-right btn-incluir" id="btn_incluir">
 					</div>
 				</div>
 			</div>
@@ -49,7 +75,7 @@
 		<div class="container">
 			<div class="col-md-2"></div>
 			<div class="col-md-8" id="container_timeline"></div>
-			
+
 		</div>
 
 
@@ -57,7 +83,7 @@
 			<div class="panel panel-default">
 
 			<div class="panel-heading"><h4>Publicar uma foto</h4></div>
-			
+
 			<div class="panel-body">
 				<div class="form-group">
 					<input type="file" name="arquivo" id="arquivo" class="form-control">
