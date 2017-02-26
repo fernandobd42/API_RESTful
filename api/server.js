@@ -11,6 +11,15 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(multiparty());
+app.use(function(req, res, next){
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader("Access-Control-Allow-Credentials", true);
+
+    next();
+});
 
 var port = 8080;
 
@@ -31,8 +40,6 @@ app.get('/', function(req, res){
 
 // POST (create)
 app.post('/api', function(req, res){
-
-    res.setHeader("Access-Control-Allow-Origin", "*")
 
     var date = new Date()
     time_stamp = date.getTime();
@@ -71,8 +78,6 @@ app.post('/api', function(req, res){
 // GET (ready)
 app.get('/api', function(req, res){
 
-        res.setHeader("Access-Control-Allow-Origin", "*")
-
     db.open( function(err, mongoclient){
         mongoclient.collection('postagens', function(err, collection){
             collection.find().toArray(function(err, result){
@@ -89,6 +94,7 @@ app.get('/api', function(req, res){
 
 // GET by ID (ready)
 app.get('/api/:id', function(req, res){
+
     db.open( function(err, mongoclient){
         mongoclient.collection('postagens', function(err, collection){
             collection.find(objectId(req.params.id)).toArray(function(err, result){
@@ -120,11 +126,19 @@ app.get('/imagens/:imagem', function(req, res){
 
 // PUT by ID (update)
 app.put('/api/:id', function(req, res){
+
     db.open( function(err, mongoclient){
         mongoclient.collection('postagens', function(err, collection){
             collection.update(
                 { _id: objectId(req.params.id)},
-                { $set: {titulo: req.body.titulo}},
+                // { $set: {titulo: req.body.titulo}},
+                { $push: {
+                        comentarios: {
+                            id_comentario: new objectId(),
+                            comentario: req.body.comentario
+                        }
+                    }
+                },
                 {},
                 function(err, result){
                     if(err){
@@ -140,6 +154,7 @@ app.put('/api/:id', function(req, res){
 
 // DELETE by ID (remove)
 app.delete('/api/:id', function(req, res){
+
     db.open( function(err, mongoclient){
         mongoclient.collection('postagens', function(err, collection){
             collection.remove({ _id: objectId(req.params.id)}, function(err, result){
